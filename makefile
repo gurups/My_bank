@@ -1,25 +1,21 @@
 # the compiler: gcc for C program, define as g++ for C++
-# Define required macros here
-SHELL = /bin/sh
+  CC = g++
+ 
+  # compiler flags:
+  #  -g     - this flag adds debugging information to the executable file
+  #  -Wall  - this flag is used to turn on most compiler warnings
+  CFLAGS  = -g -Wall -Imb_utils
+  LDFLAGS = -lpthread
+  # The build target 
+  TARGET = my_bank
+ $(TARGET): my_bank.cpp mb_utils/mb_util.cpp
+	$(CC) $(CFLAGS) $? $(LDFLAGS) -o $@
+  all: $(TARGET)
+ 
+  #$(TARGET): $(TARGET).cpp
+#	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).cpp `pkg-config --cflags --libs gstreamer-1.0`
+ 
+  clean:
+	rm -f $(TARGET)
 
-OBJS =  my_bank.o mb_util.o
-# compiler flags:
-#  -g     - this flag adds debugging information to the executable file
-#  -Wall  - this flag is used to turn on most compiler warnings
-CFLAG = -Wall -g
-CC = g++
-INCLUDE = .
-LIBS = -lm
-
-# $@ is the name of the file to be made.
-# $? is the names of the changed dependents.
-# Below, $@ represents my_bank and $? or $@.cpp picks up all the changed source files.
-my_bank:${OBJ}
-	${CC} ${CFLAGS} ${INCLUDES} -o $@ ${OBJS} ${LIBS}
-clean:
-	-rm -f *.o core *.core
-
-# $< the name of the related file that caused the action.
-# $* the prefix shared by target and dependent files.
-.cpp.o:
-	${CC} ${CFLAGS} ${INCLUDES} -c $<
+include mb_utils/src.mk
