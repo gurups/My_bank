@@ -1,17 +1,84 @@
 #include "iostream"
 #include "stdio.h"
+#include <string.h>
 #include "my_bank.h"
+#include <thread>
 #include "mb_util.h"
+#include "mb_sb_data.h"
 #include <pthread.h>
 #include <signal.h>
+#include <unistd.h>
 
 using namespace std;
-extern int terminate_gp;
 
-void* mb_process_data(void *mb_process_vdata)
+volatile int terminate_g;
+
+void signal_handler(int signal);
+
+void signal_handler(int signal)
 {
-	printf("GURU mb_process_data\n");
-	pthread_exit(NULL);
+	if(signal == SIGINT){
+		terminate_g = 1;
+		cout<<"recieved sigint"<<endl;
+	}else{
+		cout<<"other than sigint"<<endl;
+	}
+}
+
+
+template <typename G>
+G printme(G v, G c)
+{
+	cout<<"TV "<<v<<"TC "<<c<<endl;
+	return v+c;
+}
+// This thread is launched by using 
+// function pointer as callable
+void mb_thread_fp(int gp)
+{
+	int k = 5;
+	while(1){
+		printf("GURU foo %d\n",k);
+		sleep(2);
+		k--;
+	}
+
+	return;
+}
+
+// A callable object
+class thread_obj {
+public:
+    void operator()(int x)
+    {
+    	int i = 7;
+        while(1){
+            cout << "Thread using function"
+                  " object as  callable\n"<<i--<<endl;
+			sleep(2);
+		}
+    }
+};
+
+void mb_bank_data::set_data()
+{
+	this->mb_customer_id = 900;
+	this->mb_balance = 1999;
+}
+void mb_bank_data::display_data()
+{
+	cout<<"cus id "<<this->mb_customer_id<<endl;
+	cout<<"bal "<<this->mb_balance<<endl;
+}
+
+void mb_savings_account::set_account_details()
+{
+	cout<<"set account details"<<endl;
+}
+
+void mb_address::read_user_data()
+{
+	cout<<"read_user_data"<<endl;
 }
 
 void* mb_system_data(void *mb_ststem_vdata)
@@ -22,12 +89,14 @@ void* mb_system_data(void *mb_ststem_vdata)
 
 int main()
 {
-	terminate_g = 78;
-	terminate_gp = 89;
-	mb_thread mb_process;
-	mb_thread mb_system;
+	mb_thread_st mb_process;
+	mb_thread_st mb_system;
 	int mb_status = 0;
-	
+
+	signal(SIGINT,signal_handler);
+	cout <<"SUM"<<printme<int>(4,7)<<endl;
+	cout <<"SUM2 "<<printme<double>(8.9,3.1)<<endl;
+	cout<<"SUN3 "<<printme<char>('A','A')<<endl;
 	mb_status = pthread_create(&mb_process.tid, NULL,mb_process_data, NULL);
 	if(mb_status != 0){
 		cout<<"failed to create process thread"<<endl;
@@ -39,10 +108,13 @@ int main()
 		goto MB_GOTO2;
 	}
 	
+	display_d();
+	while(!terminate_g){}
+
+	
 	pthread_join(mb_process.tid,NULL);
 	pthread_join(mb_system.tid,NULL);
-	printf("GURU %d %d\n",terminate_g,terminate_gp);
-	display_d();
+	
 	return 0;
 
 MB_GOTO1:

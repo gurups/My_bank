@@ -1,9 +1,9 @@
 #include "iostream"
 #include "stdio.h"
+#include "mb_util.h"
+#include "my_bank.h"
 
-volatile int terminate_gp;
 void display_d()
 {
-	terminate_gp = 90;
-	printf("GURU display %d\n",terminate_gp);
+	printf("GURU display\n");
 }
