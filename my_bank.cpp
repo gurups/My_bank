@@ -32,6 +32,38 @@ G printme(G v, G c)
 	cout<<"TV "<<v<<"TC "<<c<<endl;
 	return v+c;
 }
+
+template <class CT>
+class G_array{
+	private:
+		CT *ptr;
+		int size;
+	public:
+		G_array(CT arr[], int s);
+		void printme();
+};
+
+template <class CT>
+G_array<CT>::G_array(CT arr[],int s)
+{
+	int k = 0;
+	ptr = new CT[s];
+	size = s;
+	while(k < size){
+		ptr[k] = arr[k];
+		k++;
+	}
+}
+
+template <class CT>
+void G_array<CT>::printme()
+{
+	int l=0;
+	while(l<size){
+		cout<<"F "<<*(ptr + l)<<endl;
+		l++;
+	}
+}
 // This thread is launched by using 
 // function pointer as callable
 void mb_thread_fp(int gp)
@@ -92,7 +124,9 @@ int main()
 	mb_thread_st mb_process;
 	mb_thread_st mb_system;
 	int mb_status = 0;
-
+	int arr[] = {1,2,3,4,5};
+	G_array<int> ga(arr,5);
+	ga.printme();
 	signal(SIGINT,signal_handler);
 	cout <<"SUM"<<printme<int>(4,7)<<endl;
 	cout <<"SUM2 "<<printme<double>(8.9,3.1)<<endl;
