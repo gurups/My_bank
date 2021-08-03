@@ -33,32 +33,36 @@ G printme(G v, G c)
 	return v+c;
 }
 
-template <class CT>
+template <class CT, class MT>
 class G_array{
 	private:
 		CT *ptr;
+		MT *pstr;
 		int size;
 	public:
-		G_array(CT arr[], int s);
+		G_array(CT arr[], MT str[],int s);
 		void printme();
 };
 
-template <class CT>
-G_array<CT>::G_array(CT arr[],int s)
+template <class CT, class MT>
+G_array<CT,MT>::G_array(CT arr[],MT str[],int s)
 {
 	int k = 0;
 	ptr = new CT[s];
+	pstr = new MT[s];
 	size = s;
 	while(k < size){
 		ptr[k] = arr[k];
+		pstr[k] = str[k];
 		k++;
 	}
 }
 
-template <class CT>
-void G_array<CT>::printme()
+template <class CT, class MT>
+void G_array<CT,MT>::printme()
 {
 	int l=0;
+	cout<<"C "<<pstr<<endl;
 	while(l<size){
 		cout<<"F "<<*(ptr + l)<<endl;
 		l++;
@@ -125,7 +129,8 @@ int main()
 	mb_thread_st mb_system;
 	int mb_status = 0;
 	int arr[] = {1,2,3,4,5};
-	G_array<int> ga(arr,5);
+	char ss[] = {'g','u','r','u','u','\0'};
+	G_array<int, char> ga(arr,ss,5);
 	ga.printme();
 	signal(SIGINT,signal_handler);
 	cout <<"SUM"<<printme<int>(4,7)<<endl;
