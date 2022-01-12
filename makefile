@@ -1,7 +1,7 @@
 # the compiler: gcc for C program, define as g++ for C++
 CC = g++
-INCLUDE_HEADER:=-I.
-SRC_FILES_LIST:=my_bank.cpp
+INCLUDE_HEADER:=-I./include/
+SRC_FILES_LIST:=src/my_bank.cpp
 include mb_utils/src.mk
 include sb_data/src.mk
 # compiler flags:
@@ -17,6 +17,7 @@ TARGET = my_bank
   all: $(TARGET)
  
   #$(TARGET): $(TARGET).cpp
+  #this part for gstreamer code compilation
 #	$(CC) $(CFLAGS) -o $(TARGET) $(SRC_FILES_LIST) `pkg-config --cflags --libs gstreamer-1.0`
  
   clean:

@@ -127,7 +127,7 @@ int main()
 {
 	mb_thread_st mb_process;
 	mb_thread_st mb_system;
-	int mb_status = 0;
+	int mb_status = MB_UTILS_NO_ERROR;
 	int arr[] = {1,2,3,4,5};
 	char ss[] = {'g','u','r','u','u','\0'};
 	G_array<int, char> ga(arr,ss,5);
@@ -137,18 +137,20 @@ int main()
 	cout <<"SUM2 "<<printme<double>(8.9,3.1)<<endl;
 	cout<<"SUN3 "<<printme<char>('A','A')<<endl;
 	mb_status = pthread_create(&mb_process.tid, NULL,mb_process_data, NULL);
-	if(mb_status != 0){
+	if(mb_status != MB_UTILS_NO_ERROR){
 		cout<<"failed to create process thread"<<endl;
 		goto MB_GOTO1;
 	}
 	mb_status = pthread_create(&mb_system.tid,NULL,mb_system_data,NULL);
-	if(mb_status != 0){
+	if(mb_status != MB_UTILS_NO_ERROR){
 		cout<<"Failed to create system thread"<<endl;
 		goto MB_GOTO2;
 	}
 	
 	display_d();
-	while(!terminate_g){}
+	while(!terminate_g){
+		usleep(500000);
+	}
 
 	
 	pthread_join(mb_process.tid,NULL);
